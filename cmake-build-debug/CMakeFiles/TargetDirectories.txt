@@ -1,3 +1,0 @@
-/home/intbyte/projects/frogl/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/intbyte/projects/frogl/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/intbyte/projects/frogl/cmake-build-debug/CMakeFiles/frogl.dir
