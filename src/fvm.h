@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "stack.h"
 
 #define FVM_INSTRUCTION(name, index) static constexpr frogl::byte name = index
 
@@ -17,7 +18,8 @@ namespace frogl {
         FVM_INSTRUCTION(PLUS, 1);
         FVM_INSTRUCTION(EXIT, 2);
 
-        std::vector<byte> stack;
+        frogl::stack stack;
+
 
     };
 }
