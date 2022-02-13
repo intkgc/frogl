@@ -3,4 +3,5 @@ project(frogl)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(frogl main.cpp)
+include_directories(src)
+add_executable(frogl main.cpp src/fvm.cpp src/fvm.h)
