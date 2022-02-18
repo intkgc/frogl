@@ -1,5 +1,6 @@
 #include <cstring>
 #include "fvm.h"
+#include <iostream>
 
 using namespace frogl;
 
@@ -65,6 +66,13 @@ void div_i32(vm &vm, byte* bytecode, int &index){
     std::memcpy(&vm.stack[stackSize], &a, 4);
 }
 
+void print(vm &vm, byte* bytecode, int &index){
+    unsigned char character;
+    while ((character = vm.stack.pop()) != '\0'){
+        std::cout << character;
+    }
+}
+
 void frogl::vm::init() {
     instructions[PUSH_8] = &push_8;
     instructions[PUSH_16] = &push_16;
@@ -74,6 +82,8 @@ void frogl::vm::init() {
     instructions[MINUS_I32] = &minus_i32;
     instructions[MUL_I32] = &mul_i32;
     instructions[DIV_I32] = &div_i32;
+
+    instructions[PRINT] = &print;
 }
 
 void vm::run(std::vector<byte> &bytecode) {

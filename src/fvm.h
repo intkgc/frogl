@@ -23,7 +23,8 @@ namespace frogl {
         FVM_INSTRUCTION(MINUS_I32, PLUS_I32 + 1);
         FVM_INSTRUCTION(MUL_I32, MINUS_I32 + 1);
         FVM_INSTRUCTION(DIV_I32, MUL_I32 + 1);
-
+        FVM_INSTRUCTION(PRINT, DIV_I32 + 1);
+        FVM_INSTRUCTION(PRINT_I32, DIV_I32 + 1);
 
         frogl::stack stack;
 
