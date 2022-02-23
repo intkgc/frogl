@@ -1,5 +1,6 @@
 #include <cstring>
 #include "fvm.h"
+#include "bytecode/instruction.h"
 #include <iostream>
 
 using namespace frogl;
@@ -111,11 +112,11 @@ void cless_i32(vm &vm, byte *bytecode, int &index) {
 
 void goto_if(vm &vm, byte *bytecode, int &index) {
     if (vm.compareFlag) {
-        short address = *reinterpret_cast<short *>(bytecode);
-        index -= address + 1;
+        int address = *reinterpret_cast<int *>(&vm.stack[vm.stack.getSize() - 4]);
+        vm.stack.erase(4);
+        index = address;
         return;
     }
-    index += 2;
 }
 
 void frogl::vm::init() {

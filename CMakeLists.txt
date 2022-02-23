@@ -5,4 +5,4 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(src)
 
-add_executable(frogl main.cpp src/fvm.cpp src/fvm.h src/stack.cpp src/stack.h)
+add_executable(frogl main.cpp src/fvm.cpp src/fvm.h src/stack.cpp src/stack.h src/bytecode/builder.cpp src/bytecode/builder.h src/bytecode/instruction.h)

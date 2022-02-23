@@ -19,11 +19,6 @@ int frogl::stack::allocatedSize() {
 }
 
 
-
-int frogl::stack::getSize() {
-    return size;
-}
-
 unsigned char &frogl::stack::operator[](int index) {
     return array[index];
 }

@@ -8,15 +8,19 @@ namespace frogl {
         unsigned short size = 0;
     public:
         stack() = default;
-        void init(int size);
         ~stack();
+        void init(int size);
         void push(unsigned char byte);
         unsigned char pop();
         int allocatedSize();
-        int getSize();
         unsigned char& operator [](int index);
+
         inline void erase(int count){
             size-=count;
+        }
+
+        inline int getSize() const{
+            return size;
         }
     };
 }

@@ -1,0 +1,47 @@
+#pragma once
+
+#include <cstring>
+#include "fvm.h"
+
+namespace frogl {
+
+    enum class flags {
+        LESS = 0,
+        BIGGER,
+    };
+
+    class builder {
+    private:
+
+        template<typename T>
+        inline void pushValue(T value){
+            byte array[sizeof(T)];
+            memcpy(&array, &value, sizeof(T));
+            for (int i = 0; i < sizeof(T); ++i) {
+                bytecode.push_back(array[i]);
+            }
+        }
+
+    public:
+        std::vector<byte> bytecode;
+        void push_i32(unsigned int value);
+        void push_i16(short value);
+        void push_i8(byte value);
+        void double_32();
+
+        void plus_i32();
+        void minus_i32();
+        void mul_i32();
+        void div_i32();
+
+        void compare(flags flag);
+        void gotoIf();
+        void gotoIf(unsigned int address);
+        unsigned int label();
+
+        void print_i32();
+        void print();
+    };
+}
+
+

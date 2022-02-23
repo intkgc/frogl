@@ -1,27 +1,47 @@
-#include <iostream>
 #include "fvm.h"
-#include "climits"
+#include "bytecode/instruction.h"
+#include "bytecode/builder.h"
+
+using namespace frogl;
 
 int main() {
     frogl::vm::init();
-    using frogl::vm;
-    std::vector<frogl::byte> ir {
-            vm::PUSH_8, 1,
-            vm::PUSH_8, 2,
-            vm::PLUS_I32,
-            vm::DOUBLE_32,
-            vm::PUSH_16, 255, 255,
-            vm::CLESS_I32,
-            vm::DOUBLE_32,
-            vm::PRINT_I32,
-            vm::PUSH_32, '\0', '\n', ' ', ' ',
-            vm::PRINT,
-            vm::GOTOIF, 16, 0
-    };
     frogl::vm vm;
 
+
+    std::vector<frogl::byte> ir {
+            PUSH_8, 0,
+            PUSH_8, 1,
+            PLUS_I32,
+            DOUBLE_32,
+            PUSH_32, 6, 0, 0, 0,
+            CLESS_I32,
+            DOUBLE_32,
+            PRINT_I32,
+            PUSH_32, '\0', '\n', ' ', ' ',
+            PRINT,
+            PUSH_8, 2,
+            GOTOIF
+    };
+
+    frogl::builder builder;
+
+    builder.push_i32(0);
+
+    auto address = builder.label();
+
+    builder.push_i8(1);
+    builder.plus_i32();
+    builder.double_32();
+    builder.push_i32(6);
+    builder.compare(flags::LESS);
+    builder.double_32();
+    builder.print_i32();
+    builder.gotoIf(address);
+
+
     vm.stack.init(128);
-    vm.run(ir);
+    vm.run(builder.bytecode);
 
 
     return 0;
