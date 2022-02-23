@@ -86,7 +86,7 @@ void print(vm &vm, byte *bytecode, int &index) {
 void print_i32(vm &vm, byte *bytecode, int &index) {
     int value = *reinterpret_cast<int *>(&vm.stack[vm.stack.getSize() - 4]);
     vm.stack.erase(4);
-    std::cout << value;
+    std::cout << value << '\n';
 }
 
 
@@ -113,10 +113,9 @@ void cless_i32(vm &vm, byte *bytecode, int &index) {
 void goto_if(vm &vm, byte *bytecode, int &index) {
     if (vm.compareFlag) {
         int address = *reinterpret_cast<int *>(&vm.stack[vm.stack.getSize() - 4]);
-        vm.stack.erase(4);
         index = address;
-        return;
     }
+    vm.stack.erase(4);
 }
 
 void frogl::vm::init() {

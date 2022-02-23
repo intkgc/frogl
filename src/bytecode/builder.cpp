@@ -24,7 +24,7 @@ void frogl::builder::minus_i32() {
 }
 
 void frogl::builder::mul_i32() {
-    bytecode.push_back(MINUS_I32);
+    bytecode.push_back(MUL_I32);
 }
 
 void frogl::builder::div_i32() {
