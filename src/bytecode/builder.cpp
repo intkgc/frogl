@@ -63,4 +63,27 @@ void frogl::builder::double_32() {
     bytecode.push_back(DOUBLE_32);
 }
 
+void frogl::builder::frame() {
+    bytecode.push_back(FRAME);
+}
+
+
+
+void frogl::builder::load_frame() {
+    bytecode.push_back(LOAD_FRAME);
+}
+
+void frogl::builder::return_32() {
+    bytecode.push_back(RETURN_32);
+}
+
+void frogl::builder::story_32(unsigned int address) {
+    push_i32(address);
+    bytecode.push_back(STORY_32);
+}
+
+void frogl::builder::load_32(unsigned int address) {
+    push_i32(address);
+    bytecode.push_back(LOAD_32);
+}
 

@@ -9,6 +9,7 @@ namespace frogl {
     class vm {
     public:
         bool compareFlag = false;
+        unsigned int stackFrame;
         static void init();
         void run(std::vector<byte> &bytecode);
 

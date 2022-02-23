@@ -22,6 +22,11 @@ namespace frogl {
         inline int getSize() const{
             return size;
         }
+
+        inline void setSize(unsigned int stackSize){
+            this->size = stackSize;
+        }
+
     };
 }
 

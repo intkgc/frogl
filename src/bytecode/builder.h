@@ -41,6 +41,12 @@ namespace frogl {
 
         void print_i32();
         void print();
+
+        void frame();
+        void load_32(unsigned int address);
+        void load_frame();
+        void return_32();
+        void story_32(unsigned int address);
     };
 }
 

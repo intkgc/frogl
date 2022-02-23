@@ -26,18 +26,22 @@ int main() {
 
     frogl::builder builder;
 
+    builder.frame();
     builder.push_i32(1);
-
-    auto address = builder.label();
-
-    builder.push_i8(2);
-    builder.mul_i32();
+    builder.push_i32(0);
+    auto label = builder.label();
+    builder.load_32(4);
+    builder.push_i32(1);
+    builder.plus_i32();
     builder.double_32();
-    builder.push_i32(1001);
-    builder.compare(flags::LESS);
     builder.double_32();
+    builder.double_32();
+    builder.story_32(4);
     builder.print_i32();
-    builder.gotoIf(address);
+    builder.push_i32(6);
+    builder.compare(flags::LESS);
+    builder.gotoIf(label);
+
 
 
     vm.stack.init(128);

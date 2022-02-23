@@ -25,12 +25,39 @@ void push_16(vm &vm, byte *bytecode, int &index) {
 
 void push_32(vm &vm, byte *bytecode, int &index) {
     index += 4;
-    vm.stack.push(bytecode[0]);
-    vm.stack.push(bytecode[1]);
-    vm.stack.push(bytecode[2]);
-    vm.stack.push(bytecode[3]);
+    for (int i = 0; i < 4; ++i)
+        vm.stack.push(bytecode[i]);
 }
 
+void frame(vm &vm, byte *bytecode, int &index) {
+    vm.stackFrame = vm.stack.getSize();
+}
+
+void load_frame(vm &vm, byte *bytecode, int &index) {
+    vm.stackFrame = *reinterpret_cast<int *>(&vm.stack[vm.stack.getSize() - 4]);
+    vm.stack.erase(4);
+}
+
+
+void load_32(vm &vm, byte *bytecode, int &index) {
+    auto valueAddress = reinterpret_cast<unsigned int*>(&vm.stack[vm.stack.getSize() - 4]);
+    *valueAddress = *reinterpret_cast<unsigned int*>(&vm.stack[vm.stackFrame + *valueAddress]);
+    return;
+}
+
+void story_32(vm &vm, byte *bytecode, int &index) {
+    auto valueAddress = *reinterpret_cast<unsigned int*>(&vm.stack[vm.stack.getSize() - 4]);
+    auto value = *reinterpret_cast<unsigned int*>(&vm.stack[vm.stack.getSize() - 8]);
+    *reinterpret_cast<unsigned int*>(&vm.stack[vm.stackFrame + valueAddress]) = value;
+    vm.stack.erase(4);
+}
+
+void return_32(vm &vm, byte *bytecode, int &index) {
+    frogl::byte *value = &vm.stack[vm.stack.getSize() - 4];
+    vm.stack.setSize(vm.stackFrame);
+    for (int i = 0; i < 4; ++i)
+        vm.stack.push(value[i]);
+}
 
 void double_32(vm &vm, byte *bytecode, int &index) {
     int stackSize = vm.stack.getSize();
@@ -138,7 +165,14 @@ void frogl::vm::init() {
 
     instructions[GOTOIF] = &goto_if;
 
+    instructions[FRAME] = &frame;
+    instructions[LOAD_FRAME] = &load_frame;
+    instructions[RETURN_32] = &return_32;
+    instructions[LOAD_32] = &load_32;
+    instructions[STORY_32] = &story_32;
 }
+
+
 
 void vm::run(std::vector<byte> &bytecode) {
     int index = 0;
