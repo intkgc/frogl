@@ -33,6 +33,10 @@ namespace frogl {
         void minus_i32();
         void mul_i32();
         void div_i32();
+        void plus_f32();
+        void minus_f32();
+        void mul_f32();
+        void div_f32();
 
         void compare(flags flag);
         void gotoIf();

@@ -28,7 +28,23 @@ void frogl::builder::mul_i32() {
 }
 
 void frogl::builder::div_i32() {
-    bytecode.push_back(DIV_I32);
+   bytecode.push_back(DIV_I32);
+}
+
+void frogl::builder::plus_f32() {
+    bytecode.push_back(PLUS_F32);
+}
+
+void frogl::builder::minus_f32() {
+    bytecode.push_back(MINUS_F32);
+}
+
+void frogl::builder::mul_f32() {
+    bytecode.push_back(MUL_F32);
+}
+
+void frogl::builder::div_f32() {
+    bytecode.push_back(DIV_F32);
 }
 
 void frogl::builder::compare(flags flag) {

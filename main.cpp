@@ -1,6 +1,6 @@
-#include "fvm.h"
-#include "bytecode/instruction.h"
-#include "bytecode/builder.h"
+#include "src/fvm.h"
+#include "src/bytecode/instruction.h"
+#include "src/bytecode/builder.h"
 
 using namespace frogl;
 
@@ -25,6 +25,7 @@ int main() {
     };
 
     frogl::builder builder;
+
 
     builder.frame();
     builder.push_i32(1);

@@ -42,7 +42,6 @@ void load_frame(vm &vm, byte *bytecode, int &index) {
 void load_32(vm &vm, byte *bytecode, int &index) {
     auto valueAddress = reinterpret_cast<unsigned int*>(&vm.stack[vm.stack.getSize() - 4]);
     *valueAddress = *reinterpret_cast<unsigned int*>(&vm.stack[vm.stackFrame + *valueAddress]);
-    return;
 }
 
 void story_32(vm &vm, byte *bytecode, int &index) {
@@ -67,40 +66,48 @@ void double_32(vm &vm, byte *bytecode, int &index) {
     vm.stack.push(vm.stack[stackSize - 1]);
 }
 
-void plus_i32(vm &vm, byte *bytecode, int &index) {
-    int a, b, stackSize = vm.stack.getSize();
-    a = *reinterpret_cast<int *>(&vm.stack[stackSize - 4]);
-    b = *reinterpret_cast<int *>(&vm.stack[stackSize = stackSize - 8]);
+template<typename T>
+void plus(vm &vm, byte *bytecode, int &index) {
+    T a, b;
+    int stackSize = vm.stack.getSize();
+    a = *reinterpret_cast<T *>(&vm.stack[stackSize - sizeof(T)]);
+    b = *reinterpret_cast<T *>(&vm.stack[stackSize = stackSize - sizeof(T)*2]);
     a += b;
-    vm.stack.erase(4);
-    std::memcpy(&vm.stack[stackSize], &a, 4);
+    vm.stack.erase(sizeof(T));
+    std::memcpy(&vm.stack[stackSize], &a, sizeof(T));
 }
 
-void minus_i32(vm &vm, byte *bytecode, int &index) {
-    int a, b, stackSize = vm.stack.getSize();
-    a = *reinterpret_cast<int *>(&vm.stack[stackSize - 4]);
-    b = *reinterpret_cast<int *>(&vm.stack[stackSize = stackSize - 8]);
+template<typename T>
+void minus(vm &vm, byte *bytecode, int &index) {
+    T a, b;
+    int stackSize = vm.stack.getSize();
+    a = *reinterpret_cast<T *>(&vm.stack[stackSize - sizeof(T)]);
+    b = *reinterpret_cast<T *>(&vm.stack[stackSize = stackSize - sizeof(T)*2]);
     a = b - a;
-    vm.stack.erase(4);
-    std::memcpy(&vm.stack[stackSize], &a, 4);
+    vm.stack.erase(sizeof(T));
+    std::memcpy(&vm.stack[stackSize], &a, sizeof(T));
 }
 
-void mul_i32(vm &vm, byte *bytecode, int &index) {
-    int a, b, stackSize = vm.stack.getSize();
-    a = *reinterpret_cast<int *>(&vm.stack[stackSize - 4]);
-    b = *reinterpret_cast<int *>(&vm.stack[stackSize = stackSize - 8]);
+template<typename T>
+void mul(vm &vm, byte *bytecode, int &index) {
+    T a, b;
+    int stackSize = vm.stack.getSize();
+    a = *reinterpret_cast<T *>(&vm.stack[stackSize - sizeof(T)]);
+    b = *reinterpret_cast<T *>(&vm.stack[stackSize = stackSize - sizeof(T)*2]);
     a *= b;
-    vm.stack.erase(4);
-    std::memcpy(&vm.stack[stackSize], &a, 4);
+    vm.stack.erase(sizeof(T));
+    std::memcpy(&vm.stack[stackSize], &a, sizeof(T));
 }
 
-void div_i32(vm &vm, byte *bytecode, int &index) {
-    int a, b, stackSize = vm.stack.getSize();
-    a = *reinterpret_cast<int *>(&vm.stack[stackSize - 4]);
-    b = *reinterpret_cast<int *>(&vm.stack[stackSize = stackSize - 8]);
+template<typename T>
+void div(vm &vm, byte *bytecode, int &index) {
+    T a, b;
+    int stackSize = vm.stack.getSize();
+    a = *reinterpret_cast<T *>(&vm.stack[stackSize - sizeof(T)]);
+    b = *reinterpret_cast<T *>(&vm.stack[stackSize = stackSize - sizeof(T)*2]);
     a = b / a;
-    vm.stack.erase(4);
-    std::memcpy(&vm.stack[stackSize], &a, 4);
+    vm.stack.erase(sizeof(T));
+    std::memcpy(&vm.stack[stackSize], &a, sizeof(T));
 }
 
 void print(vm &vm, byte *bytecode, int &index) {
@@ -151,10 +158,14 @@ void frogl::vm::init() {
     instructions[PUSH_32] = &push_32;
     instructions[DOUBLE_32] = &double_32;
 
-    instructions[PLUS_I32] = &plus_i32;
-    instructions[MINUS_I32] = &minus_i32;
-    instructions[MUL_I32] = &mul_i32;
-    instructions[DIV_I32] = &div_i32;
+    instructions[PLUS_I32] = &plus<int>;
+    instructions[MINUS_I32] = &minus<int>;
+    instructions[MUL_I32] = &mul<int>;
+    instructions[DIV_I32] = &div<int>;
+    instructions[PLUS_F32] = &plus<float>;
+    instructions[MINUS_F32] = &minus<float>;
+    instructions[MUL_F32] = &mul<float>;
+    instructions[DIV_F32] = &div<float>;
 
     instructions[PRINT] = &print;
     instructions[PRINT_I32] = &print_i32;
