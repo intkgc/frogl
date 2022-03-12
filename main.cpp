@@ -1,6 +1,9 @@
+#include <iostream>
 #include "src/fvm.h"
 #include "src/bytecode/instruction.h"
 #include "src/bytecode/builder.h"
+#include "src/froglm/compiler.h"
+#include "src/froglm/node.h"
 
 using namespace frogl;
 
@@ -8,8 +11,9 @@ int main() {
     frogl::vm::init();
     frogl::vm vm;
 
+    froglm::compiler compiler;
 
-    std::vector<frogl::byte> ir {
+    std::vector<frogl::byte> ir{
             PUSH_8, 0,
             PUSH_8, 1,
             PLUS_I32,
@@ -25,6 +29,9 @@ int main() {
     };
 
     frogl::builder builder;
+
+    std::cout << "1: " << froglm::compiler::is_function("f(x) = 123 * x - xxD") << "\n";
+    std::cout << "2: " << froglm::compiler::is_variable("f = 123 * x - xxD") << "\n";
 
 
     builder.frame();
@@ -42,7 +49,6 @@ int main() {
     builder.push_i32(6);
     builder.compare(flags::LESS);
     builder.gotoIf(label);
-
 
 
     vm.stack.init(128);
