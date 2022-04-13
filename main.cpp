@@ -28,22 +28,19 @@ int main() {
 
 
     builder.frame();
-    builder.push_i32(1);
-    builder.push_i32(0);
-    auto label = builder.label();
-    builder.load_32(4);
-    builder.push_i32(1);
-    builder.plus_i32();
+    builder.push_i32(1000);
+    auto address = builder.setLabel();
+    builder.load_32(0);
+    builder.push_i32(7);
+    builder.minus_i32();
     builder.double_32();
     builder.double_32();
-    builder.double_32();
-    builder.story_32(4);
+    builder.story_32(0);
     builder.print_i32();
-    builder.push_i32(6);
-    builder.compare(flags::LESS);
-    builder.gotoIf(label);
-
-
+    builder.push_i32(0);
+    builder.compare(frogl::flags::BIGGER);
+    builder.gotoIf(address);
+    builder.build();
 
     vm.stack.init(128);
     vm.run(builder.bytecode);

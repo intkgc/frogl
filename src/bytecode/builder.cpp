@@ -28,7 +28,7 @@ void frogl::builder::mul_i32() {
 }
 
 void frogl::builder::div_i32() {
-   bytecode.push_back(DIV_I32);
+    bytecode.push_back(DIV_I32);
 }
 
 void frogl::builder::plus_f32() {
@@ -49,7 +49,7 @@ void frogl::builder::div_f32() {
 
 void frogl::builder::compare(flags flag) {
     bytecode.push_back(CLESS_I32);
-    if(flag == flags::BIGGER)
+    if (flag == flags::BIGGER)
         bytecode.push_back(INVERT);
 }
 
@@ -63,7 +63,7 @@ void frogl::builder::gotoIf(unsigned int address) {
     gotoIf();
 }
 
-unsigned int frogl::builder::label() {
+unsigned int frogl::builder::getAddress() {
     return bytecode.size();
 }
 
@@ -84,7 +84,6 @@ void frogl::builder::frame() {
 }
 
 
-
 void frogl::builder::load_frame() {
     bytecode.push_back(LOAD_FRAME);
 }
@@ -101,5 +100,35 @@ void frogl::builder::story_32(unsigned int address) {
 void frogl::builder::load_32(unsigned int address) {
     push_i32(address);
     bytecode.push_back(LOAD_32);
+}
+
+void frogl::builder::gotoIf(frogl::label address) {
+    push_i32(0);
+    labels.emplace_back(bytecode.size() - 4, address);
+    gotoIf();
+}
+
+void frogl::builder::build() {
+    for (auto &i: labels) {
+        *reinterpret_cast<unsigned int *>(&bytecode[i.first]) = *i.second.ptr;
+        delete i.second.ptr;
+    }
+    labels.clear();
+}
+
+frogl::label frogl::builder::newLabel() {
+    struct label label;
+    label.ptr = new unsigned int();
+    return label;
+}
+
+void frogl::builder::initLabel(frogl::label label) {
+    *label.ptr = bytecode.size();
+}
+
+frogl::label frogl::builder::setLabel() {
+    auto value = newLabel();
+    initLabel(value);
+    return value;
 }
 

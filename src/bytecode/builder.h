@@ -5,6 +5,10 @@
 
 namespace frogl {
 
+    struct label {
+        unsigned int *ptr = nullptr;
+    };
+
     enum class flags {
         LESS = 0,
         BIGGER,
@@ -12,6 +16,7 @@ namespace frogl {
 
     class builder {
     private:
+        std::vector<std::pair<int, label>> labels;
 
         template<typename T>
         inline void pushValue(T value){
@@ -41,7 +46,11 @@ namespace frogl {
         void compare(flags flag);
         void gotoIf();
         void gotoIf(unsigned int address);
-        unsigned int label();
+        void gotoIf(label address);
+        unsigned int getAddress();
+        label newLabel();
+        label setLabel();
+        void initLabel(label label);
 
         void print_i32();
         void print();
@@ -51,6 +60,8 @@ namespace frogl {
         void load_frame();
         void return_32();
         void story_32(unsigned int address);
+
+        void build();
     };
 }
 
