@@ -29,6 +29,11 @@ void push_32(vm &vm, byte *bytecode, int &index) {
         vm.stack.push(bytecode[i]);
 }
 
+void load_32(vm &vm, byte *bytecode, int &index) {
+    auto valueAddress = reinterpret_cast<unsigned int*>(&vm.stack[vm.stack.getSize() - 4]);
+    *valueAddress = *reinterpret_cast<unsigned int*>(&vm.stack[vm.stackFrame + *valueAddress]);
+}
+
 void frame(vm &vm, byte *bytecode, int &index) {
     vm.stackFrame = vm.stack.getSize();
 }

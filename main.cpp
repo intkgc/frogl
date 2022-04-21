@@ -34,9 +34,11 @@ int main() {
     std::cout << "2: " << froglm::compiler::is_variable("f = 123 * x - xxD") << "\n";
 
 
+    auto address = builder.newLabel();
+
     builder.frame();
     builder.push_i32(1000);
-    auto address = builder.setLabel();
+    builder.initLabel(address);
     builder.load_32(0);
     builder.push_i32(7);
     builder.minus_i32();
